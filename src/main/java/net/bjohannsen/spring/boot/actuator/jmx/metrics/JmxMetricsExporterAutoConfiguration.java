@@ -19,13 +19,19 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 class JmxMetricsExporterAutoConfiguration {
 
     @Bean
-    MBeanAttributeMetricsExporter jmxBeanMetricsExporter(MBeanAttributeReader mBeanAttributeReader, MeterRegistry meterRegistry,
-                                                        MBeanAttributeMetricsExporterConfiguration configuration) {
-        return new MBeanAttributeMetricsExporter(mBeanAttributeReader, meterRegistry, configuration);
+    MBeanAttributeMetricsExporter jmxBeanMetricsExporter(MBeanAttributeReader mBeanAttributeReader,
+                                                         MetricFacade metricFacade,
+                                                         JmxMetricsExporterConfiguration configuration) {
+        return new MBeanAttributeMetricsExporter(mBeanAttributeReader, metricFacade, configuration);
     }
 
     @Bean
     MBeanAttributeReader mBeanAttributeReader(MBeanServer mBeanServer) {
         return new MBeanAttributeReader(mBeanServer);
+    }
+
+    @Bean
+    MetricFacade metricFacade(MeterRegistry meterRegistry) {
+        return new MetricFacade(new ValueReferenceStore(), meterRegistry);
     }
 }

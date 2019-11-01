@@ -1,0 +1,15 @@
+jmx-metrics-export:
+  enabled: true
+  mbeans:
+    -
+      name: com.mindsmash.coyo.util.circuit:name=websocketDisconnectCircuitBreaker,type=WebsocketDisconnectCircuitBreaker
+      metric-name: testMetricA
+      attributes:
+        - InvocationCount
+        - Timespan
+        - Threshold
+    -
+      name: com.mindsmash.coyo.configuration.async:name=longRunningDistributedAsyncEventListenerContainer,type=DistributedAsyncConfiguration.MBeanSimpleMessageListenerContainer
+      metric-name: testMetricB
+      attributes:
+        - ActiveConsumerCount

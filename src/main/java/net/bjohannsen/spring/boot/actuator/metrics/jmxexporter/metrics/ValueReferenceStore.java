@@ -1,4 +1,4 @@
-package net.bjohannsen.spring.boot.actuator.jmx.metrics;
+package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.metrics;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Micrometer relies on weak references for gauges.
  * This class is used to hold and store references to values to save them from GC.
  */
-class ValueReferenceStore {
+public class ValueReferenceStore {
 
     private final Map<String, Double> map = new ConcurrentHashMap<>();
 
@@ -17,7 +17,7 @@ class ValueReferenceStore {
      * @param value
      * @return
      */
-    double keepReference(String key, Double value) {
+    Double keepReference(String key, Double value) {
         map.put(key, value);
         return value;
     }
@@ -30,5 +30,4 @@ class ValueReferenceStore {
     Double getValue(String key) {
         return map.get(key);
     }
-
 }

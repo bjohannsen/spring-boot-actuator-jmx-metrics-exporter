@@ -1,4 +1,4 @@
-package net.bjohannsen.spring.boot.actuator.jmx.metrics;
+package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx;
 
 import java.util.Optional;
 import javax.management.AttributeNotFoundException;
@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * Reader for JMX MBean attributes.
  */
 public class MBeanAttributeReader {
 

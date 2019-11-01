@@ -1,8 +1,10 @@
-package net.bjohannsen.spring.boot.actuator.jmx.metrics;
+package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.MBeanAttributeReader;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.metrics.MetricFacade;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -11,7 +13,6 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockito.quality.Strictness;
 
-import static net.bjohannsen.spring.boot.actuator.jmx.metrics.JmxMetricsExporterConfiguration.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -42,7 +43,7 @@ public class MBeanAttributeMetricsExporterTest {
     @Test
     public void thatSubmitMetricWorks() {
         // given
-        MBeanConfiguration mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A);
+        JmxMetricsExporterConfiguration.MBeanConfiguration mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A);
         when(configurationMock.getPrefix()).thenReturn("jmx");
         when(configurationMock.getMbeans()).thenReturn(List.of(mbeanConfig));
 
@@ -58,7 +59,7 @@ public class MBeanAttributeMetricsExporterTest {
     @Test
     public void thatNoMetricIsSubmittedWhenNoJmxAttributeValueIsAvailable() {
         // given
-        MBeanConfiguration mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A);
+        JmxMetricsExporterConfiguration.MBeanConfiguration mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A);
         when(configurationMock.getMbeans()).thenReturn(List.of(mbeanConfig));
 
         when(mBeanAttributeReaderMock.findMBeanAttributeValue(M_BEAN_NAME, ATTRIBUTE_A)).thenReturn(Optional.empty());
@@ -75,7 +76,7 @@ public class MBeanAttributeMetricsExporterTest {
         // given
         String attributeB = "attributeB";
         double valueB = 2011;
-        MBeanConfiguration mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A, attributeB);
+        JmxMetricsExporterConfiguration.MBeanConfiguration mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A, attributeB);
         when(configurationMock.getMbeans()).thenReturn(List.of(mbeanConfig));
         when(configurationMock.getPrefix()).thenReturn("jmx");
 
@@ -96,8 +97,8 @@ public class MBeanAttributeMetricsExporterTest {
         String beanNameB = "beanNameB";
         String metricNameB = "metricNameB";
         double valueB = 2011;
-        MBeanConfiguration mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A);
-        MBeanConfiguration mbeanConfigB = buildMBeanConfig(beanNameB, metricNameB, ATTRIBUTE_A);
+        JmxMetricsExporterConfiguration.MBeanConfiguration mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A);
+        JmxMetricsExporterConfiguration.MBeanConfiguration mbeanConfigB = buildMBeanConfig(beanNameB, metricNameB, ATTRIBUTE_A);
         when(configurationMock.getMbeans()).thenReturn(List.of(mbeanConfig, mbeanConfigB));
         when(configurationMock.getPrefix()).thenReturn("jmx");
 
@@ -112,8 +113,8 @@ public class MBeanAttributeMetricsExporterTest {
         verify(metricFacadeMock).submitGauge("jmx." + metricNameB + "." + ATTRIBUTE_A, valueB);
     }
 
-    private MBeanConfiguration buildMBeanConfig(String beanName, String metricName, String ... attributes) {
-        MBeanConfiguration configuration = new MBeanConfiguration();
+    private JmxMetricsExporterConfiguration.MBeanConfiguration buildMBeanConfig(String beanName, String metricName, String ... attributes) {
+        JmxMetricsExporterConfiguration.MBeanConfiguration configuration = new JmxMetricsExporterConfiguration.MBeanConfiguration();
         configuration.setName(beanName);
         configuration.setMetricName(metricName);
         configuration.getAttributes().addAll(Arrays.asList(attributes));

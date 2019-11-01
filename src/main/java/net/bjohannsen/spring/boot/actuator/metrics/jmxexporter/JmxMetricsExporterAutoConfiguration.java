@@ -1,7 +1,10 @@
-package net.bjohannsen.spring.boot.actuator.jmx.metrics;
+package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import javax.management.MBeanServer;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.MBeanAttributeReader;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.metrics.MetricFacade;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.metrics.ValueReferenceStore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

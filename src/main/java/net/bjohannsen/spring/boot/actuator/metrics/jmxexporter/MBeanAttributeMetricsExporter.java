@@ -1,6 +1,8 @@
-package net.bjohannsen.spring.boot.actuator.jmx.metrics;
+package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter;
 
-import net.bjohannsen.spring.boot.actuator.jmx.metrics.JmxMetricsExporterConfiguration.MBeanConfiguration;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.JmxMetricsExporterConfiguration.MBeanConfiguration;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.MBeanAttributeReader;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.metrics.MetricFacade;
 import org.springframework.scheduling.annotation.Scheduled;
 
 /**

@@ -1,4 +1,4 @@
-package net.bjohannsen.spring.boot.actuator.jmx.metrics;
+package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter;
 
 import java.util.ArrayList;
 import java.util.HashSet;

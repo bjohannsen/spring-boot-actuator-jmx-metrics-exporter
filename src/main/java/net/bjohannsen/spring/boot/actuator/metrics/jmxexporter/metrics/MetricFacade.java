@@ -1,10 +1,9 @@
-package net.bjohannsen.spring.boot.actuator.jmx.metrics;
+package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.metrics;
 
 import io.micrometer.core.instrument.MeterRegistry;
 
 /**
- * Micrometer relies on weak references for gauges.
- * This class is used to hold and store references to values to save them from GC.
+ * Facade for metrics collection.
  */
 public class MetricFacade {
 
@@ -17,9 +16,10 @@ public class MetricFacade {
     }
 
     /**
+     * Submits a new value for the given metric name.
      *
-     * @param metricName
-     * @param value
+     * @param metricName given metricName
+     * @param value given value
      */
     public void submitGauge(String metricName, Double value) {
         valueReferenceStore.keepReference(metricName, value);

@@ -17,7 +17,7 @@ public class JmxMetricsExporterConfiguration {
     /**
      * Enables the jmx export of metrics.
      */
-    private boolean enabled = true;
+    private boolean enabled = false;
 
     /**
      * Prefix to use for exported metrics.

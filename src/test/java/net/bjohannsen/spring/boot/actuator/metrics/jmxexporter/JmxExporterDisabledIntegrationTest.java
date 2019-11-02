@@ -3,37 +3,33 @@ package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(
         classes = { IntegrationTestConfiguration.class },
         initializers = {ConfigFileApplicationContextInitializer.class} )
-@TestPropertySource(properties = { "spring.config.location=classpath:application-test.yml" })
-public class JmxExporterIntegrationTest {
-
-    private static final String EXPECTED_METRIC_NAME = "jmx.testMetricA.SomeAttribute";
+@TestPropertySource(properties = { "spring.config.location=classpath:application-disabled-test.yml" })
+public class JmxExporterDisabledIntegrationTest {
 
     @Autowired
     private MeterRegistry meterRegistry;
-    public static final long SCRAPE_INTERVAL = 1000;
 
-    @Test
-    @DirtiesContext
-    public void thatMbeanAttributesAreSubmittedAsMetrics() {
-        // when
-        waitFor(SCRAPE_INTERVAL);
+    @Autowired
+    private ApplicationContext applicationContext;
 
-        // then
-        verify(meterRegistry).gauge(EXPECTED_METRIC_NAME, 42.0d);
+    @Test(expected = NoSuchBeanDefinitionException.class)
+    public void thatNoExporterBeanIsCreated() {
+        MBeanAttributeMetricsExporter bean = applicationContext.getBean(MBeanAttributeMetricsExporter.class);
     }
 
     /*
@@ -41,22 +37,19 @@ public class JmxExporterIntegrationTest {
      */
     @Test
     @DirtiesContext
-    public void thatMBeansAttributesAreSScrapeIntervalWorks() {
+    public void thatNoMetricsAreSubmittedIfLibraryIsDisabled() {
         // given
+        long scrapeInterval = 1000;
         int expectedNumberOfCalls = 2;
 
         // when
-        waitFor(SCRAPE_INTERVAL * expectedNumberOfCalls + (SCRAPE_INTERVAL/2) );
-
-        // then
-        verify(meterRegistry, times(expectedNumberOfCalls)).gauge(EXPECTED_METRIC_NAME, 42.0d);
-    }
-
-    private void waitFor(long milliseconds) {
         try {
-            Thread.sleep(milliseconds);
+            Thread.sleep(scrapeInterval * expectedNumberOfCalls);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        // then
+        verifyZeroInteractions(meterRegistry);
     }
 }

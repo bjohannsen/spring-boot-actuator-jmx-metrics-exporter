@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 /**
  * Exporter for attributes of JMX MBeans.
- *
+ * <p>
  * In case of misconfiguration or missing beans, errors are logged and the attribute is skipped.
  */
 class MBeanAttributeMetricsExporter {
@@ -28,7 +28,8 @@ class MBeanAttributeMetricsExporter {
     /**
      * Fetches values from JMX and submits them to Micrometer metrics framework.
      */
-    @Scheduled(fixedDelayString = "${jmx-metrics-export.scrape-interval:10000}")
+    @Scheduled(fixedDelayString = "${jmx-metrics-export.scrape-interval:10000}",
+            initialDelayString = "${jmx-metrics-export.scrape-interval:10000}")
     public void submitMetrics() {
         config.getMbeans().forEach(this::submitMBeanAttributesAsMetrics);
     }

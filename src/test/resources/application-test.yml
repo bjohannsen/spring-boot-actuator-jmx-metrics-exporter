@@ -5,6 +5,7 @@ spring:
 jmx-metrics-export:
   enabled: true
   prefix: jmx
+  scrape-interval: 1000
   mbeans:
     -
       name: net.bjohannsen.spring.boot.actuator.metrics.jmxexporter:name=mBean,type=JmxExporterIntegrationTest.MBeanClass

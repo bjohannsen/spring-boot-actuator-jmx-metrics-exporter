@@ -62,18 +62,25 @@ public class JmxExporterIntegrationTest {
         verify(meterRegistry).gauge(EXPECTED_METRIC_NAME, 42.0d);
     }
 
+    /*
+     * Test runs with a scrape interval of 1000ms.
+     */
     @Test
     @DirtiesContext
     public void thatMBeansAttributesAreSScrapeIntervalWorks() {
         // given
+        long scrapeInterval = 1000;
+        int expectedNumberOfCalls = 2;
+
+        // when
         try {
-            Thread.sleep(11000);
+            Thread.sleep(scrapeInterval * expectedNumberOfCalls);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         // then
-        verify(meterRegistry, times(2)).gauge(EXPECTED_METRIC_NAME, 42.0d);
+        verify(meterRegistry, times(expectedNumberOfCalls)).gauge(EXPECTED_METRIC_NAME, 42.0d);
     }
 
     @ManagedResource

@@ -8,13 +8,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * Configure which MBeans attributes to export as metrics.
  */
 @Component
 @ConfigurationProperties(prefix = "jmx-metrics-export")
 public class JmxMetricsExporterConfiguration {
-
-    public static final long DEFAULT_SCRAPE_INTERVAL = 10_000;
 
     /**
      * Enables the jmx export of metrics.
@@ -25,6 +23,11 @@ public class JmxMetricsExporterConfiguration {
      * Prefix to use for exported metrics.
      */
     private String prefix = "jmx";
+
+    /**
+     * Scrape interval in milliseconds.
+     */
+    private long scrapeInterval = 10_000;
 
     /**
      * List of {@link MBeanConfiguration} to scrape metrics from.
@@ -45,6 +48,14 @@ public class JmxMetricsExporterConfiguration {
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
+    }
+
+    public long getScrapeInterval() {
+        return scrapeInterval;
+    }
+
+    public void setScrapeInterval(long scrapeInterval) {
+        this.scrapeInterval = scrapeInterval;
     }
 
     public List<MBeanConfiguration> getMbeans() {

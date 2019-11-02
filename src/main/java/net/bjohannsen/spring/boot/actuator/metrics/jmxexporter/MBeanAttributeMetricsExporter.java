@@ -28,7 +28,7 @@ class MBeanAttributeMetricsExporter {
     /**
      * Fetches values from JMX and submits them to Micrometer metrics framework.
      */
-    @Scheduled(fixedDelay = JmxMetricsExporterConfiguration.DEFAULT_SCRAPE_INTERVAL)
+    @Scheduled(fixedDelayString = "${jmx-metrics-export.scrape-interval:10000}")
     public void submitMetrics() {
         config.getMbeans().forEach(this::submitMBeanAttributesAsMetrics);
     }

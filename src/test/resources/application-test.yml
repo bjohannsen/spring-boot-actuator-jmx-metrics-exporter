@@ -1,0 +1,13 @@
+spring:
+  jmx:
+    enabled: true
+
+jmx-metrics-export:
+  enabled: true
+  prefix: jmx
+  mbeans:
+    -
+      name: net.bjohannsen.spring.boot.actuator.metrics.jmxexporter:name=mBean,type=JmxExporterIntegrationTest.MBeanClass
+      metric-name: testMetricA
+      attributes:
+        - SomeAttribute

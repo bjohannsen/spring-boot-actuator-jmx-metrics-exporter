@@ -23,6 +23,7 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.22.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 publishing {

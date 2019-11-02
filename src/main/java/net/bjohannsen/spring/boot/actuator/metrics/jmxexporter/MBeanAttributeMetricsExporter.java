@@ -1,6 +1,6 @@
 package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter;
 
-import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.JmxMetricsExporterConfiguration.MBeanConfiguration;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.MBeanMetricsExporterConfig;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.MBeanAttributeReader;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.metrics.MetricFacade;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -10,37 +10,37 @@ import org.springframework.scheduling.annotation.Scheduled;
  * <p>
  * In case of misconfiguration or missing beans, errors are logged and the attribute is skipped.
  */
-class MBeanAttributeMetricsExporter {
+public class MBeanAttributeMetricsExporter {
 
     private static final String DELIMITER = ".";
 
     private final MBeanAttributeReader mBeanAttributeReader;
     private final MetricFacade metricFacade;
-    private final JmxMetricsExporterConfiguration config;
+    private final MBeanMetricsExporterConfig config;
 
     MBeanAttributeMetricsExporter(MBeanAttributeReader mBeanAttributeReader, MetricFacade metricFacade,
-                                  JmxMetricsExporterConfiguration config) {
+                                  MBeanMetricsExporterConfig config) {
         this.mBeanAttributeReader = mBeanAttributeReader;
         this.metricFacade = metricFacade;
         this.config = config;
     }
 
     /**
-     * Fetches values from JMX and submits them to Micrometer metrics framework.
+     * Reads values from JMX MBean attributes and submits them as metrics.
      */
     @Scheduled(fixedDelayString = "${jmx-metrics-export.scrape-interval:10000}",
             initialDelayString = "${jmx-metrics-export.scrape-interval:10000}")
     public void submitMetrics() {
-        config.getMbeans().forEach(this::submitMBeanAttributesAsMetrics);
+        config.getMBeanConfigs().forEach(this::submitMBeanAttributesAsMetrics);
     }
 
-    private void submitMBeanAttributesAsMetrics(MBeanConfiguration mBeanConfiguration) {
+    private void submitMBeanAttributesAsMetrics(MBeanMetricsExporterConfig.MBeanMetricsConfig mBeanConfiguration) {
         mBeanConfiguration.getAttributes().forEach(
                 attributeName -> submitMBeanAttributeAsMetrics(mBeanConfiguration, attributeName));
     }
 
-    private void submitMBeanAttributeAsMetrics(MBeanConfiguration mBeanConfiguration, String attributeName) {
-        String mBeanName = mBeanConfiguration.getName();
+    private void submitMBeanAttributeAsMetrics(MBeanMetricsExporterConfig.MBeanMetricsConfig mBeanConfiguration, String attributeName) {
+        String mBeanName = mBeanConfiguration.getMbeanName();
         mBeanAttributeReader.findMBeanAttributeValue(mBeanName, attributeName)
                 .ifPresent(attributeValue -> {
                     String metricName = buildMetricName(mBeanConfiguration.getMetricName(), attributeName);

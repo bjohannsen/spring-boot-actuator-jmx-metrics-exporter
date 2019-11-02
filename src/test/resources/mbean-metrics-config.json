@@ -1,0 +1,10 @@
+{
+  "prefix": "jmx",
+  "mbeans": [
+    {
+      "mbeanName": "net.bjohannsen.spring.boot.actuator.metrics.jmxexporter:name=mBean,type=IntegrationTestConfiguration.MBeanClass",
+      "metricName": "testMetricA",
+      "attributes": ["SomeAttribute"]
+    }
+  ]
+}

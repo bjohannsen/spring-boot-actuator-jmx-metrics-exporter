@@ -20,6 +20,11 @@ public class MBeanAttributeReader {
 
     private final MBeanServer mBeanServer;
 
+    /**
+     * Constructor.
+     *
+     * @param mBeanServer mbean server.
+     */
     public MBeanAttributeReader(MBeanServer mBeanServer) {
         this.mBeanServer = mBeanServer;
     }

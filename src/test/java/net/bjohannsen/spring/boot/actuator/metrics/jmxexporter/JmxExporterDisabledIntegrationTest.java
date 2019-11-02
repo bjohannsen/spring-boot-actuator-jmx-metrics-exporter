@@ -1,6 +1,7 @@
 package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter;
 
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.search.MeterNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -12,14 +13,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.mockito.Mockito.verifyZeroInteractions;
-
 @RunWith(SpringRunner.class)
 @ContextConfiguration(
         classes = { IntegrationTestConfiguration.class },
         initializers = {ConfigFileApplicationContextInitializer.class} )
 @TestPropertySource(properties = { "spring.config.location=classpath:application-disabled-test.yml" })
 public class JmxExporterDisabledIntegrationTest {
+
+    private static final String EXPECTED_METRIC_NAME = "jmx.testMetricA.SomeAttribute";
 
     @Autowired
     private MeterRegistry meterRegistry;
@@ -28,6 +29,7 @@ public class JmxExporterDisabledIntegrationTest {
     private ApplicationContext applicationContext;
 
     @Test(expected = NoSuchBeanDefinitionException.class)
+    @DirtiesContext
     public void thatNoExporterBeanIsCreated() {
         MBeanAttributeMetricsExporter bean = applicationContext.getBean(MBeanAttributeMetricsExporter.class);
     }
@@ -35,7 +37,7 @@ public class JmxExporterDisabledIntegrationTest {
     /*
      * Test runs with a scrape interval of 1000ms.
      */
-    @Test
+    @Test(expected = MeterNotFoundException.class)
     @DirtiesContext
     public void thatNoMetricsAreSubmittedIfLibraryIsDisabled() {
         // given
@@ -50,6 +52,6 @@ public class JmxExporterDisabledIntegrationTest {
         }
 
         // then
-        verifyZeroInteractions(meterRegistry);
+        meterRegistry.get(EXPECTED_METRIC_NAME).gauge();
     }
 }

@@ -20,10 +20,29 @@ dependencies {
     implementation 'org.springframework:spring-context'
     implementation 'org.springframework.boot:spring-boot-actuator'
     implementation 'org.springframework.boot:spring-boot-autoconfigure'
+    implementation 'com.fasterxml.jackson.core:jackson-core'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.22.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-actuator'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier = 'javadoc'
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
 }
 
 publishing {
@@ -34,6 +53,8 @@ publishing {
             version = '0.0.1'
 
             from components.java
+            artifact sourcesJar
+            artifact javadocJar
         }
     }
 }

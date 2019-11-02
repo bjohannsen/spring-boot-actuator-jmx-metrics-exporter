@@ -1,9 +1,10 @@
 package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter;
 
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+import org.springframework.boot.actuate.autoconfigure.metrics.MetricsAutoConfiguration;
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -16,11 +17,8 @@ import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 @EnableScheduling
 @EnableConfigurationProperties
 @Configuration
-@Import({JmxAutoConfiguration.class, JmxMetricsExporterAutoConfiguration.class})
+@Import({JmxAutoConfiguration.class, JmxMetricsExporterAutoConfiguration.class, MetricsAutoConfiguration.class})
 public class IntegrationTestConfiguration {
-
-    @MockBean
-    MeterRegistry meterRegistry;
 
     @Bean
     MBeanClass mBean() {
@@ -31,6 +29,9 @@ public class IntegrationTestConfiguration {
     TaskScheduler taskScheduler() {
         return new ConcurrentTaskScheduler();
     }
+
+    @Bean
+    MeterRegistry meterRegistry() { return new SimpleMeterRegistry(); }
 
     @ManagedResource
     public static class MBeanClass {
@@ -43,7 +44,7 @@ public class IntegrationTestConfiguration {
 
         @ManagedAttribute
         public long getSomeAttribute() {
-            return someAttribute;
+            return someAttribute++;
         }
     }
 }

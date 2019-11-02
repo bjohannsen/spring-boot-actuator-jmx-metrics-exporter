@@ -10,8 +10,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(
@@ -21,19 +21,21 @@ import static org.mockito.Mockito.verify;
 public class JmxExporterIntegrationTest {
 
     private static final String EXPECTED_METRIC_NAME = "jmx.testMetricA.SomeAttribute";
+    private static final long STARTUP_DELAY = 100;
+    private static final long SCRAPE_INTERVAL = 1000;
 
     @Autowired
     private MeterRegistry meterRegistry;
-    public static final long SCRAPE_INTERVAL = 1000;
 
     @Test
     @DirtiesContext
     public void thatMbeanAttributesAreSubmittedAsMetrics() {
         // when
+        waitFor(STARTUP_DELAY);
         waitFor(SCRAPE_INTERVAL);
 
         // then
-        verify(meterRegistry).gauge(EXPECTED_METRIC_NAME, 42.0d);
+        assertThat(meterRegistry.get(EXPECTED_METRIC_NAME).gauge().value(), equalTo(42.0d));
     }
 
     /*
@@ -43,13 +45,13 @@ public class JmxExporterIntegrationTest {
     @DirtiesContext
     public void thatMBeansAttributesAreSScrapeIntervalWorks() {
         // given
-        int expectedNumberOfCalls = 2;
-
-        // when
-        waitFor(SCRAPE_INTERVAL * expectedNumberOfCalls + (SCRAPE_INTERVAL/2) );
+        waitFor(STARTUP_DELAY);
+        waitFor(SCRAPE_INTERVAL);
+        assertThat(meterRegistry.get(EXPECTED_METRIC_NAME).gauge().value(), equalTo(42.0d));
 
         // then
-        verify(meterRegistry, times(expectedNumberOfCalls)).gauge(EXPECTED_METRIC_NAME, 42.0d);
+        waitFor(SCRAPE_INTERVAL);
+        assertThat(meterRegistry.get(EXPECTED_METRIC_NAME).gauge().value(), equalTo(43.0d));
     }
 
     private void waitFor(long milliseconds) {

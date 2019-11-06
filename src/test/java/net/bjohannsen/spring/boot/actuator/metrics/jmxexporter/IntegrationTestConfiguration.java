@@ -44,7 +44,11 @@ public class IntegrationTestConfiguration {
 
         @ManagedAttribute
         public long getSomeAttribute() {
-            return someAttribute++;
+            return someAttribute;
+        }
+
+        public void setSomeAttribute(long someAttribute) {
+            this.someAttribute = someAttribute;
         }
     }
 }

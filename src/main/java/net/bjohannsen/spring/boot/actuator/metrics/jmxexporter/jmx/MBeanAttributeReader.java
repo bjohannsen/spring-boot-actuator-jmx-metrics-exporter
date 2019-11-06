@@ -47,9 +47,9 @@ public class MBeanAttributeReader {
         } catch (InstanceNotFoundException e) {
             log.info("No MBean found for name [{}].", mBeanName, e);
         } catch (AttributeNotFoundException e) {
-            log.info("No Attribute [{}] found for MBean [{}].", mBeanName, attributeName, e);
+            log.info("No Attribute [{}] found for MBean [{}].", attributeName, mBeanName, e);
         }  catch (ReflectionException | MBeanException e) {
-            log.info("Error while scraping attribute [{}] of MBean [{}].", mBeanName, attributeName, e);
+            log.info("Error while scraping attribute [{}] of MBean [{}].", attributeName, mBeanName, e);
         }
         return Optional.empty();
     }

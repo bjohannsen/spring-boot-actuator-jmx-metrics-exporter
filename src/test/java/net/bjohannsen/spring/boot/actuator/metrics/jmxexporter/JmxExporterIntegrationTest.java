@@ -27,9 +27,15 @@ public class JmxExporterIntegrationTest {
     @Autowired
     private MeterRegistry meterRegistry;
 
+    @Autowired
+    private IntegrationTestConfiguration.MBeanClass testMBean;
+
     @Test
     @DirtiesContext
     public void thatMbeanAttributesAreSubmittedAsMetrics() {
+        // given
+        testMBean.setSomeAttribute(42L);
+
         // when
         waitFor(STARTUP_DELAY);
         waitFor(SCRAPE_INTERVAL);
@@ -45,13 +51,17 @@ public class JmxExporterIntegrationTest {
     @DirtiesContext
     public void thatMBeansAttributesAreSScrapeIntervalWorks() {
         // given
+        testMBean.setSomeAttribute(42L);
         waitFor(STARTUP_DELAY);
         waitFor(SCRAPE_INTERVAL);
         assertThat(meterRegistry.get(EXPECTED_METRIC_NAME).gauge().value(), equalTo(42.0d));
 
+        testMBean.setSomeAttribute(1909L);
+        assertThat(meterRegistry.get(EXPECTED_METRIC_NAME).gauge().value(), equalTo(42.0d));
+
         // then
         waitFor(SCRAPE_INTERVAL);
-        assertThat(meterRegistry.get(EXPECTED_METRIC_NAME).gauge().value(), equalTo(43.0d));
+        assertThat(meterRegistry.get(EXPECTED_METRIC_NAME).gauge().value(), equalTo(1909.0d));
     }
 
     private void waitFor(long milliseconds) {

@@ -30,9 +30,11 @@ test:
       - build
       - .gradle
   artifacts:
+    reports:
+      junit: build/test-results/test/**/TEST-*.xml
     paths:
       - build/reports/tests/
-      - build/reports/tests/jacoco
+      - build/reports/jacoco/
     expire_in: 1 week
 
 publish:
@@ -49,3 +51,5 @@ publish:
       - build/publications/
     expire_in: 1 week
   when: manual
+  only:
+    - tags

@@ -1,3 +1,6 @@
+[![Build](https://gitlab.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/badges/master/pipeline.svg)](https://gitlab.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/badges/master/pipeline.svg)
+[![Build](https://gitlab.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/badges/master/coverage.svg)](https://gitlab.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/badges/master/coverage.svg)
+
 # spring-boot-actuator-jmx-metrics-exporter
 Library to publish JMX MBean attributes as Spring Actuator metrics
 

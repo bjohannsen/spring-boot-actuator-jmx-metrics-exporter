@@ -10,7 +10,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
-public class ConfigReaderTest {
+public class JmxMetricsConfigurationParsingTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

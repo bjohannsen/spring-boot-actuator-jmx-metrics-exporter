@@ -31,16 +31,45 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
+task printCoverageResult() {
+    dependsOn jacocoTestReport
+
+    def reportFile = project.file("build/reports/jacoco/test/jacocoTestReport.xml")
+    inputs.file(reportFile)
+
+    doLast {
+        def slurper = new XmlSlurper()
+        slurper.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
+        slurper.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
+        def xml = slurper.parse(reportFile)
+        def counter = xml.counter.find {
+            node -> node.@type == 'LINE'
+        }
+        def missed = counter.@missed.toDouble()
+        def covered = counter.@covered.toDouble()
+        def total = missed + covered
+        def percentage = covered / total * 100
+
+        printf "Total %.0f%%%n", percentage
+    }
+}
+
 jacocoTestReport {
     reports {
         html.enabled = true
         xml.enabled = true
     }
+    finalizedBy printCoverageResult
 }
 
 test {
+    testLogging {
+        outputs.upToDateWhen {false}
+        showStandardStreams = true
+    }
     finalizedBy jacocoTestReport
 }
+
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
@@ -82,9 +111,18 @@ publishing {
                 }
             }
 
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+
             groupId = 'net.bjohannsen'
             artifactId = 'spring-boot-actuator-jmx-metrics-exporter'
-            version = '0.0.1'
+            version = '0.1.0'
 
             from components.java
             artifact sourcesJar

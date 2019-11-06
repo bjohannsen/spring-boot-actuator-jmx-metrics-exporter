@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    id 'jacoco'
     id 'io.spring.dependency-management' version "1.0.8.RELEASE"
 }
 
@@ -30,6 +31,17 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
+jacocoTestReport {
+    reports {
+        html.enabled = true
+        xml.enabled = true
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport
+}
+
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
     archiveClassifier = 'sources'
@@ -48,6 +60,28 @@ artifacts {
 publishing {
     publications {
         maven(MavenPublication) {
+            pom {
+                name = 'Spring Boot Actuator JMX Metrics Exporter'
+                description = 'Library to export JMX MBean attribute as Spring Boot Actuator metrics'
+                url = 'https://github.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'http://https://opensource.org/licenses/MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'bjohannsen'
+                        name = 'Benedikt Johannsen'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git@github.com:bjohannsen/spring-boot-actuator-jmx-metrics-exporter.git'
+                    url = 'https://github.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter'
+                }
+            }
+
             groupId = 'net.bjohannsen'
             artifactId = 'spring-boot-actuator-jmx-metrics-exporter'
             version = '0.0.1'

@@ -31,7 +31,7 @@ public class JmxExporterDisabledIntegrationTest {
     @Test(expected = NoSuchBeanDefinitionException.class)
     @DirtiesContext
     public void thatNoExporterBeanIsCreated() {
-        MBeanAttributeMetricsExporter bean = applicationContext.getBean(MBeanAttributeMetricsExporter.class);
+        JmxMetricsExporter bean = applicationContext.getBean(JmxMetricsExporter.class);
     }
 
     /*

@@ -3,7 +3,7 @@ package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.MBeanMetricsExporterConfig;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.JmxMetricsConfiguration;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.MBeanAttributeReader;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.metrics.MetricFacade;
 import org.junit.Rule;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-public class MBeanAttributeMetricsExporterTest {
+public class JmxMetricsExporterTest {
 
     private static final String M_BEAN_NAME = "mBeanName";
     private static final String METRIC_NAME = "metricName";
@@ -33,19 +33,19 @@ public class MBeanAttributeMetricsExporterTest {
     private MBeanAttributeReader mBeanAttributeReaderMock;
 
     @Mock
-    private MBeanMetricsExporterConfig configurationMock;
+    private JmxMetricsConfiguration configurationMock;
 
     @Mock
     private MetricFacade metricFacadeMock;
 
     @InjectMocks
-    private MBeanAttributeMetricsExporter exporter;
+    private JmxMetricsExporter exporter;
 
     @Test
     public void thatSubmitMetricWorks() {
         // given
 
-        MBeanMetricsExporterConfig.MBeanMetricsConfig mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A);
+        JmxMetricsConfiguration.MBeanMetricsConfig mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A);
         when(configurationMock.getPrefix()).thenReturn("jmx");
         when(configurationMock.getMBeanConfigs()).thenReturn(List.of(mbeanConfig));
 
@@ -61,7 +61,7 @@ public class MBeanAttributeMetricsExporterTest {
     @Test
     public void thatNoMetricIsSubmittedWhenNoJmxAttributeValueIsAvailable() {
         // given
-        MBeanMetricsExporterConfig.MBeanMetricsConfig mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A);
+        JmxMetricsConfiguration.MBeanMetricsConfig mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A);
         when(configurationMock.getMBeanConfigs()).thenReturn(List.of(mbeanConfig));
 
         when(mBeanAttributeReaderMock.findMBeanAttributeValue(M_BEAN_NAME, ATTRIBUTE_A)).thenReturn(Optional.empty());
@@ -78,7 +78,7 @@ public class MBeanAttributeMetricsExporterTest {
         // given
         String attributeB = "attributeB";
         double valueB = 2011;
-        MBeanMetricsExporterConfig.MBeanMetricsConfig mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A, attributeB);
+        JmxMetricsConfiguration.MBeanMetricsConfig mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A, attributeB);
         when(configurationMock.getMBeanConfigs()).thenReturn(List.of(mbeanConfig));
         when(configurationMock.getPrefix()).thenReturn("jmx");
 
@@ -99,8 +99,8 @@ public class MBeanAttributeMetricsExporterTest {
         String beanNameB = "beanNameB";
         String metricNameB = "metricNameB";
         double valueB = 2011;
-        MBeanMetricsExporterConfig.MBeanMetricsConfig mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A);
-        MBeanMetricsExporterConfig.MBeanMetricsConfig mbeanConfigB = buildMBeanConfig(beanNameB, metricNameB, ATTRIBUTE_A);
+        JmxMetricsConfiguration.MBeanMetricsConfig mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A);
+        JmxMetricsConfiguration.MBeanMetricsConfig mbeanConfigB = buildMBeanConfig(beanNameB, metricNameB, ATTRIBUTE_A);
         when(configurationMock.getMBeanConfigs()).thenReturn(List.of(mbeanConfig, mbeanConfigB));
         when(configurationMock.getPrefix()).thenReturn("jmx");
 
@@ -115,7 +115,7 @@ public class MBeanAttributeMetricsExporterTest {
         verify(metricFacadeMock).submitGauge("jmx." + metricNameB + "." + ATTRIBUTE_A, valueB);
     }
 
-    private MBeanMetricsExporterConfig.MBeanMetricsConfig buildMBeanConfig(String beanName, String metricName, String ... attributes) {
-        return new MBeanMetricsExporterConfig.MBeanMetricsConfig(beanName, metricName, Set.of(attributes));
+    private JmxMetricsConfiguration.MBeanMetricsConfig buildMBeanConfig(String beanName, String metricName, String ... attributes) {
+        return new JmxMetricsConfiguration.MBeanMetricsConfig(beanName, metricName, Set.of(attributes));
     }
 }

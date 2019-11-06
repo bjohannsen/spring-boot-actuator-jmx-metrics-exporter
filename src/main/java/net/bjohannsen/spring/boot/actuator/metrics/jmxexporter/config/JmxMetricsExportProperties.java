@@ -4,11 +4,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * Configuration for the exporter.
+ * Configuration properties for the exporter.
  */
 @Component
-@ConfigurationProperties(prefix = MBeanAttributeMetricsExporterProperties.CONFIG_BASE_NAME)
-public class MBeanAttributeMetricsExporterProperties {
+@ConfigurationProperties(prefix = JmxMetricsExportProperties.CONFIG_BASE_NAME)
+public class JmxMetricsExportProperties {
 
     /**
      * Root path for all properties.
@@ -26,7 +26,7 @@ public class MBeanAttributeMetricsExporterProperties {
     private long scrapeInterval = 10_000;
 
     /**
-     * Path to json config file containing {@link MBeanMetricsExporterConfig}.
+     * Path to json config file containing {@link JmxMetricsConfiguration}.
      * Could be a reference to a file from the classpath (classpath:file.json), file system (file://file.json) or an URL.
      */
     private String configFile;

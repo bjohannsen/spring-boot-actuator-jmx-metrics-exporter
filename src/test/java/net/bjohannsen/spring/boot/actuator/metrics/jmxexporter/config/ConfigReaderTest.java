@@ -3,7 +3,7 @@ package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
-import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.MBeanMetricsExporterConfig.MBeanMetricsConfig;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.JmxMetricsConfiguration.MBeanMetricsConfig;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -20,11 +20,11 @@ public class ConfigReaderTest {
         InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("mbean-metrics-config.json");
 
         // when
-        MBeanMetricsExporterConfig mBeanMetricsExporterConfig = objectMapper.readValue(resourceAsStream, MBeanMetricsExporterConfig.class);
+        JmxMetricsConfiguration jmxMetricsConfiguration = objectMapper.readValue(resourceAsStream, JmxMetricsConfiguration.class);
 
         // then
-        assertThat(mBeanMetricsExporterConfig.getPrefix(), equalTo("jmx"));
-        MBeanMetricsConfig mBeanMetricsConfig = mBeanMetricsExporterConfig.getMBeanConfigs().get(0);
+        assertThat(jmxMetricsConfiguration.getPrefix(), equalTo("jmx"));
+        MBeanMetricsConfig mBeanMetricsConfig = jmxMetricsConfiguration.getMBeanConfigs().get(0);
 
         assertThat(mBeanMetricsConfig.getMbeanName(), equalTo("net.bjohannsen.spring.boot.actuator.metrics.jmxexporter:name=mBean,type=IntegrationTestConfiguration.MBeanClass"));
         assertThat(mBeanMetricsConfig.getMetricName(), equalTo("testMetricA"));

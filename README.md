@@ -1,7 +1,7 @@
 # spring-boot-actuator-jmx-metrics-exporter
 Library to publish JMX MBean attributes as Spring Actuator metrics
 
-For performance reasons, the JMX data is only scraped in a fixed interval of 10s.
+For performance reasons, the JMX data is only scraped in an interval of 10s.
 
 ## How to use
 
@@ -17,19 +17,28 @@ Configuration properties are located under 'jmx-metrics-export'.
 
 ### Global configuration
 
-| Key              | Default    | Description                                             |
-|------------------|------------|---------------------------------------------------------|
-| enabled          | false      | Enable metrics                                          | 
-| scrape-interval  | 10000      | Interval to scrape data from MBeans in milliseconds     |
-| prefix           | jmx        | Prefix applied to all exposed metrics                   |
-| mbeans           | empty list | List of Mbeans to scrape metrics from (see table below) |
+| Key              | Default                             | Description                                             |
+|------------------|-------------------------------------|---------------------------------------------------------|
+| enabled          | false                               | Enable metrics                                          | 
+| scrape-interval  | 10000                               | Interval to scrape data from MBeans in milliseconds     |
+| config-file      | classpath:jmx-metrics-exporter.json | Resource link to mbean config json file (see below)     |
 
-### MBean attribute configuration 
+### jmx-metrics-exporter.json
 
-| Key              | Description                                     | Example                |
-|------------------|-------------------------------------------------|------------------------|
-| name             | JMX object name of the MBean                    |                        | 
-| metrics-name     | Name of the metric for the MBean                | myBean                 |
-| attributes       | List of attributes to scrape from the intervals | Attribute1, Attribute2 |
+```
+{
+  "prefix": "jmx",
+  "mbeans": [
+    {
+      "mbeanName": "net.bjohannsen.spring.boot.actuator.metrics.jmxexporter:name=mBean,type=MBeanClass",
+      "metricName": "myMetric",
+      "attributes": ["SomeAttribute", "AnotherAttribute"]
+    }
+  ]
+}
+```
 
-An example configuration can be found in the [application-test.yml](https://github.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/blob/master/src/test/resources/application-test.yml)
+The example will expose metrics 'jmx.myMetric.SomeAttribute' and 'jmx.myMetric.AnotherAttribute'.
+
+Example configurations for application.yml and config files can be found in the [application-test.yml](https://github.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/blob/master/src/test/resources/application-test.yml) 
+and [jmx-metrics-exporter.json](https://github.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/blob/master/src/test/resources/jmx-metrics-exporter.json).

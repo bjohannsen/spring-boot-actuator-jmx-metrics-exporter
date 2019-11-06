@@ -6,17 +6,17 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Configuration which MBean attributes should be exported as metrics.
+ * Configuration which JMX MBean attributes should be exported as metrics.
  *
  * An example file can be found be found in the test resources (/src/test/resources/mbean-metrics-config.json).
  */
-public class MBeanMetricsExporterConfig {
+public class JmxMetricsConfiguration {
 
     private final String prefix;
     private final List<MBeanMetricsConfig> mbeans;
 
     @JsonCreator
-    public MBeanMetricsExporterConfig(
+    public JmxMetricsConfiguration(
             @JsonProperty(value = "prefix", defaultValue = "jmx") String prefix,
             @JsonProperty("mbeans") List<MBeanMetricsConfig> mbeans) {
         this.prefix = prefix;

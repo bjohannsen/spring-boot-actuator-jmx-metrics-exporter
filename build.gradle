@@ -1,8 +1,9 @@
 plugins {
     id 'java-library'
-    id 'maven-publish'
     id 'jacoco'
     id 'io.spring.dependency-management' version "1.0.8.RELEASE"
+    id 'signing'
+    id 'maven-publish'
 }
 
 repositories {
@@ -122,11 +123,39 @@ publishing {
 
             groupId = 'net.bjohannsen'
             artifactId = 'spring-boot-actuator-jmx-metrics-exporter'
-            version = '0.1.0'
+            version = '0.1.0-SNAPSHOT'
 
             from components.java
             artifact sourcesJar
             artifact javadocJar
         }
+
     }
+    repositories {
+        maven {
+            name 'Snapshot'
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+            credentials {
+                username = System.getenv('PUBLISH_REPO_USER')
+                password = System.getenv('PUBLISH_REPO_PW')
+            }
+        }
+        maven {
+            name 'Staging'
+            url 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+            credentials {
+                username = System.getenv('PUBLISH_REPO_USER')
+                password = System.getenv('PUBLISH_REPO_PW')
+            }
+        }
+    }
+}
+
+ext."signing.gnupg.keyName" = System.getenv('SIGNING_GPG_KEY_ID');
+ext."signing.gnupg.executable" = "gpg";
+ext."signing.gnupg.passphrase" = System.getenv('SIGNING_GPG_PASSPHRASE')
+
+signing {
+    useGpgCmd()
+    sign publishing.publications.maven
 }

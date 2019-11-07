@@ -37,9 +37,12 @@ test:
       - build/reports/jacoco/
     expire_in: 1 week
 
-publish:
+publishAsSnapshot:
   stage: deploy
-  script: gradle publish
+  before_script:
+    - apt-get update && apt-get install -y gnupg2
+    - gpg --pinentry-mode loopback --passphrase $SIGNING_GPG_PASSPHRASE --import $SIGNING_GPG_KEY
+  script: gradle publish signMavenPublication publishMavenPublicationToSnapshotRepository
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
@@ -48,8 +51,9 @@ publish:
       - .gradle
   artifacts:
     paths:
-      - build/publications/
+      - build/publications/maven/
+      - build/libs/
     expire_in: 1 week
   when: manual
   only:
-    - tags
+    - master

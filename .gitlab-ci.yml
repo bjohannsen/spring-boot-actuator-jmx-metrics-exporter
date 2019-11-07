@@ -42,7 +42,7 @@ publishAsSnapshot:
   before_script:
     - apt-get update && apt-get install -y gnupg2
     - gpg --pinentry-mode loopback --passphrase $SIGNING_GPG_PASSPHRASE --import $SIGNING_GPG_KEY
-  script: gradle publish signMavenPublication publishMavenPublicationToSnapshotRepository
+  script: gradle publish signMavenPublication publishMavenPublicationToMavenRepository
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull

@@ -133,16 +133,11 @@ publishing {
     }
     repositories {
         maven {
-            name 'Snapshot'
-            url 'https://oss.sonatype.org/content/repositories/snapshots/'
-            credentials {
-                username = System.getenv('PUBLISH_REPO_USER')
-                password = System.getenv('PUBLISH_REPO_PW')
+            if(project.version.endsWith('-RELEASE')) {
+                url 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+            } else {
+                url "https://oss.sonatype.org/content/repositories/snapshots/"
             }
-        }
-        maven {
-            name 'Staging'
-            url 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
             credentials {
                 username = System.getenv('PUBLISH_REPO_USER')
                 password = System.getenv('PUBLISH_REPO_PW')

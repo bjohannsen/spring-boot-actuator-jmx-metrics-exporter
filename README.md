@@ -52,4 +52,4 @@ Configuration properties are located under 'jmx-metrics-export'.
 The example will expose metrics 'jmx.myMetric.SomeAttribute' and 'jmx.myMetric.AnotherAttribute'.
 
 Example configurations for application.yml and config files can be found in the [application-test.yml](https://github.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/blob/master/src/test/resources/application-test.yml) 
-and [jmx-metrics-exporter.json](https://github.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/blob/master/src/test/resources/jmx-metrics-exporter.json).
+and [mbean-metrics-config.json](https://github.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/blob/master/src/test/resources/mbean-metrics-config.json).

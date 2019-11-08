@@ -1,6 +1,6 @@
 [![Build](https://gitlab.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/badges/master/pipeline.svg)](https://gitlab.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/badges/master/pipeline.svg)
 [![Build](https://gitlab.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/badges/master/coverage.svg)](https://gitlab.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/badges/master/coverage.svg)
-![Maven Central](https://img.shields.io/maven-central/v/net.bjohannsen/spring-boot-actuator-jmx-metircs-exporter)
+![Maven Central](https://img.shields.io/maven-central/v/net.bjohannsen/spring-boot-actuator-jmx-metrics-exporter)
 
 
 # spring-boot-actuator-jmx-metrics-exporter

@@ -16,7 +16,11 @@ Add dependency:
 ```
 runtime 'net.bjohannsen:spring-boot-actuator-jmx-metrics-exporter:1.0.0-RELEASE")
 ```
-Make sure that you have JMX enabled in your spring configuration (spring.jmx.enabled=true). It is disabled by default since Spring Boot 2.2.0
+
+Requirements:
+- Java 11 or higher
+- Micrometer (Spring Boot2 Actuator or Spring Boot 1.5 with [Micrometer Legacy adapter](https://micrometer.io/docs/ref/spring/1.5))
+- Jmx should be enabled in spring config ((spring.jmx.enabled=true). It is disabled by default since Spring Boot 2.2)
 
 ### Configuration
 

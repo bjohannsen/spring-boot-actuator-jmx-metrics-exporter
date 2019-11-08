@@ -31,16 +31,8 @@ public class JmxMetricsExportProperties {
      */
     private String configFile;
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public long getScrapeInterval() {
-        return scrapeInterval;
     }
 
     public void setScrapeInterval(long scrapeInterval) {

@@ -73,7 +73,6 @@ test {
     finalizedBy jacocoTestReport
 }
 
-
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
     archiveClassifier = 'sources'
@@ -152,7 +151,6 @@ publishing {
 ext."signing.gnupg.keyName" = System.getenv('SIGNING_GPG_KEY_ID');
 ext."signing.gnupg.executable" = "gpg";
 ext."signing.gnupg.passphrase" = System.getenv('SIGNING_GPG_PASSPHRASE')
-
 
 signing {
     useGpgCmd()

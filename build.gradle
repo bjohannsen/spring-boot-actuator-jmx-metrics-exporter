@@ -16,6 +16,8 @@ dependencyManagement {
     }
 }
 
+project.version = '1.0.0-SNAPSHOT'
+
 dependencies {
     implementation 'io.micrometer:micrometer-core'
     implementation 'org.slf4j:slf4j-api'
@@ -92,22 +94,24 @@ publishing {
         maven(MavenPublication) {
             pom {
                 name = 'Spring Boot Actuator JMX Metrics Exporter'
-                description = 'Library to export JMX MBean attribute as Spring Boot Actuator metrics'
+                description = 'Library to export JMX MBean attributes as Spring Boot Actuator metrics'
                 url = 'https://github.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter'
                 licenses {
                     license {
                         name = 'MIT License'
-                        url = 'http://https://opensource.org/licenses/MIT'
+                        url = 'http://www.opensource.org/licenses/mit-license.php'
                     }
                 }
                 developers {
                     developer {
-                        id = 'bjohannsen'
                         name = 'Benedikt Johannsen'
+                        email = 'mail@bjohannsen.net'
                     }
                 }
+
                 scm {
                     connection = 'scm:git:git@github.com:bjohannsen/spring-boot-actuator-jmx-metrics-exporter.git'
+                    developerConnection = 'scm:git:ssh://github.com:bjohannsen/spring-boot-actuator-jmx-metrics-exporter.git'
                     url = 'https://github.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter'
                 }
             }
@@ -123,7 +127,6 @@ publishing {
 
             groupId = 'net.bjohannsen'
             artifactId = 'spring-boot-actuator-jmx-metrics-exporter'
-            version = '0.1.0-SNAPSHOT'
 
             from components.java
             artifact sourcesJar
@@ -150,7 +153,9 @@ ext."signing.gnupg.keyName" = System.getenv('SIGNING_GPG_KEY_ID');
 ext."signing.gnupg.executable" = "gpg";
 ext."signing.gnupg.passphrase" = System.getenv('SIGNING_GPG_PASSPHRASE')
 
+/*
 signing {
     useGpgCmd()
     sign publishing.publications.maven
 }
+*/

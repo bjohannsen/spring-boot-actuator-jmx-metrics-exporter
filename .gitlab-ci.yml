@@ -37,7 +37,7 @@ test:
       - build/reports/jacoco/
     expire_in: 1 week
 
-publishAsSnapshot:
+publish:
   stage: deploy
   before_script:
     - apt-get update && apt-get install -y gnupg2
@@ -56,4 +56,4 @@ publishAsSnapshot:
     expire_in: 1 week
   when: manual
   only:
-    - master
+    - tags

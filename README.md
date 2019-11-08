@@ -1,24 +1,28 @@
 [![Build](https://gitlab.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/badges/master/pipeline.svg)](https://gitlab.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/badges/master/pipeline.svg)
 [![Build](https://gitlab.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/badges/master/coverage.svg)](https://gitlab.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/badges/master/coverage.svg)
+![Maven Central](https://img.shields.io/maven-central/v/net.bjohannsen/spring-boot-actuator-jmx-metircs-exporter)
+
 
 # spring-boot-actuator-jmx-metrics-exporter
-Library to publish JMX MBean attributes as Spring Actuator metrics
+Glue Library to publish JMX MBean attributes as Spring Actuator metrics.
 
-For performance reasons, the JMX data is only scraped in an interval of 10s.
+## How it works
+It reads configured attributes from MBeans and submits them to the Spring Boot Actuator metrics system (i.e. Micrometer).
+The JMX data is scraped in a configurable interval to avoid performance issues.
 
 ## How to use
 
 Add dependency:
 ```
-runtime 'net.bjohannsen:spring-boot-actuator-jmx-metrics-exporter:0.1.0")
+runtime 'net.bjohannsen:spring-boot-actuator-jmx-metrics-exporter:1.0.0-RELEASE")
 ```
 Make sure that you have JMX enabled in your spring configuration (spring.jmx.enabled=true). It is disabled by default since Spring Boot 2.2.0
 
-## Configuration
+### Configuration
 
 Configuration properties are located under 'jmx-metrics-export'.
 
-### Global configuration
+#### Global configuration
 
 | Key              | Default                             | Description                                             |
 |------------------|-------------------------------------|---------------------------------------------------------|
@@ -26,7 +30,7 @@ Configuration properties are located under 'jmx-metrics-export'.
 | scrape-interval  | 10000                               | Interval to scrape data from MBeans in milliseconds     |
 | config-file      | classpath:jmx-metrics-exporter.json | Resource link to mbean config json file (see below)     |
 
-### jmx-metrics-exporter.json
+#### jmx-metrics-exporter.json
 
 ```
 {

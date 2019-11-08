@@ -16,7 +16,7 @@ dependencyManagement {
     }
 }
 
-project.version = '1.0.0-SNAPSHOT'
+project.version = '1.0.0-RELEASE'
 sourceCompatibility = 11
 targetCompatibility = 11
 

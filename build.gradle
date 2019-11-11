@@ -16,7 +16,7 @@ dependencyManagement {
     }
 }
 
-project.version = '1.0.1-SNAPSHOT'
+project.version = '1.1.0-RELEASE'
 sourceCompatibility = 11
 targetCompatibility = 11
 
@@ -69,9 +69,10 @@ jacocoTestReport {
 
 test {
     testLogging {
-        outputs.upToDateWhen {false}
+        outputs.upToDateWhen { false }
         showStandardStreams = true
     }
+    exclude '**/*IntegrationTest*'
     finalizedBy jacocoTestReport
 }
 

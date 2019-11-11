@@ -1,8 +1,12 @@
 package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter;
 
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.JmxMetricsConfiguration;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.JmxAttributeIdentifier;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.MBeanAttributeReader;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.MBeanAttributeReadException;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.metrics.MetricFacade;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import static net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.JmxMetricsExportProperties.CONFIG_BASE_NAME;
@@ -13,6 +17,8 @@ import static net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.Jmx
  * In case of misconfiguration or missing beans, errors are logged and the attribute is skipped.
  */
 public class JmxMetricsExporter {
+
+    private static final Logger log = LoggerFactory.getLogger(JmxMetricsExporter.class);
 
     private static final String DELIMITER = ".";
 
@@ -38,19 +44,23 @@ public class JmxMetricsExporter {
 
     private void submitMBeanAttributesAsMetrics(JmxMetricsConfiguration.MBeanMetricsConfig mBeanConfiguration) {
         mBeanConfiguration.getAttributes().forEach(
-                attributeName -> submitMBeanAttributeAsMetrics(mBeanConfiguration, attributeName));
+                attributeId -> submitMBeanAttributeAsMetrics(mBeanConfiguration, attributeId));
     }
 
-    private void submitMBeanAttributeAsMetrics(JmxMetricsConfiguration.MBeanMetricsConfig mBeanConfiguration, String attributeName) {
+    private void submitMBeanAttributeAsMetrics(JmxMetricsConfiguration.MBeanMetricsConfig mBeanConfiguration, JmxAttributeIdentifier attributeId) {
         String mBeanName = mBeanConfiguration.getMbeanName();
-        mBeanAttributeReader.findMBeanAttributeValue(mBeanName, attributeName)
-                .ifPresent(attributeValue -> {
-                    String metricName = buildMetricName(mBeanConfiguration.getMetricName(), attributeName);
-                    metricFacade.submitGauge(metricName, attributeValue);
-                });
+        try {
+            double attributeValue = mBeanAttributeReader.findMBeanAttributeValue(mBeanName, attributeId);
+            String metricName = buildMetricName(mBeanConfiguration.getMetricName(), attributeId);
+            metricFacade.submitGauge(metricName, attributeValue);
+        } catch (MBeanAttributeReadException e) {
+            if (log.isDebugEnabled()) {
+                log.debug("Unable to read attribute [" + attributeId + "]from MBean [" + mBeanName + "].", e);
+            }
+        }
     }
 
-    private String buildMetricName(String mBeanName, String attributeName) {
-        return config.getPrefix() + DELIMITER + mBeanName + DELIMITER + attributeName;
+    private String buildMetricName(String mBeanName, JmxAttributeIdentifier attributeId) {
+        return config.getPrefix() + DELIMITER + mBeanName + DELIMITER + attributeId;
     }
 }

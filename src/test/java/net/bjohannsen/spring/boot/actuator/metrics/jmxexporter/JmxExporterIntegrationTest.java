@@ -11,9 +11,12 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.isA;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @ContextConfiguration(
         classes = { IntegrationTestConfiguration.class },
         initializers = {ConfigFileApplicationContextInitializer.class} )
@@ -31,7 +34,6 @@ public class JmxExporterIntegrationTest {
     private IntegrationTestConfiguration.MBeanClass testMBean;
 
     @Test
-    @DirtiesContext
     public void thatMbeanAttributesAreSubmittedAsMetrics() {
         // given
         testMBean.setSomeAttribute(42L);
@@ -44,12 +46,22 @@ public class JmxExporterIntegrationTest {
         assertThat(meterRegistry.get(EXPECTED_METRIC_NAME).gauge().value(), equalTo(42.0d));
     }
 
+    @Test
+    public void thatCompositeMbeanAttributesAreSubmittedAsMetrics() {
+        // given & when
+        waitFor(STARTUP_DELAY);
+        waitFor(SCRAPE_INTERVAL);
+
+        // then
+        assertThat(meterRegistry.get("jmx.memory.HeapMemoryUsage.max").gauge().value(), greaterThan(0.0));
+        assertThat(meterRegistry.get("jmx.memory.NonHeapMemoryUsage.max").gauge().value(), isA(Double.class));
+    }
+
     /*
      * Test runs with a scrape interval of 1000ms.
      */
     @Test
-    @DirtiesContext
-    public void thatMBeansAttributesAreSScrapeIntervalWorks() {
+    public void thatMBeansAttributeScrapeIntervalWorks() {
         // given
         testMBean.setSomeAttribute(42L);
         waitFor(STARTUP_DELAY);

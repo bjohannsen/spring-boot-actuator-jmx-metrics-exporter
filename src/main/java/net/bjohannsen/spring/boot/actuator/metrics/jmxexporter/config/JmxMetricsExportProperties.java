@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * Configuration properties for the exporter.
+ * Configuration properties for the JMX metrics exporter.
  */
 @Component
 @ConfigurationProperties(prefix = JmxMetricsExportProperties.CONFIG_BASE_NAME)
@@ -29,7 +29,7 @@ public class JmxMetricsExportProperties {
      * Path to json config file containing {@link JmxMetricsConfiguration}.
      * Could be a reference to a file from the classpath (classpath:file.json), file system (file://file.json) or an URL.
      */
-    private String configFile;
+    private String configFile = "classpath:mbean-metrics-config.json";
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;

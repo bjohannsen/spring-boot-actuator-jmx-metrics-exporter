@@ -2,6 +2,11 @@
   "prefix": "jmx",
   "mbeans": [
     {
+      "mbeanName": "java.lang:type=Memory",
+      "metricName": "memory",
+      "attributes": ["HeapMemoryUsage.max", "NonHeapMemoryUsage.max"]
+    },
+    {
       "mbeanName": "net.bjohannsen.spring.boot.actuator.metrics.jmxexporter:name=mBean,type=IntegrationTestConfiguration.MBeanClass",
       "metricName": "testMetricA",
       "attributes": ["SomeAttribute"]

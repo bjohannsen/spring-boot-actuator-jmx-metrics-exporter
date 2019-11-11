@@ -14,6 +14,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @ContextConfiguration(
         classes = { IntegrationTestConfiguration.class },
         initializers = {ConfigFileApplicationContextInitializer.class} )
@@ -29,7 +30,6 @@ public class JmxExporterDisabledIntegrationTest {
     private ApplicationContext applicationContext;
 
     @Test(expected = NoSuchBeanDefinitionException.class)
-    @DirtiesContext
     public void thatNoExporterBeanIsCreated() {
         JmxMetricsExporter bean = applicationContext.getBean(JmxMetricsExporter.class);
     }
@@ -38,7 +38,6 @@ public class JmxExporterDisabledIntegrationTest {
      * Test runs with a scrape interval of 1000ms.
      */
     @Test(expected = MeterNotFoundException.class)
-    @DirtiesContext
     public void thatNoMetricsAreSubmittedIfLibraryIsDisabled() {
         // given
         long scrapeInterval = 1000;

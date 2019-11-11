@@ -49,12 +49,12 @@ public class JmxMetricsConfiguration {
         /**
          * Set of attribute names to scrape from the MBean.
          */
-        private final Set<String> attributes;
+        private final Set<JmxAttributeIdentifier> attributes;
 
         @JsonCreator
         public MBeanMetricsConfig(@JsonProperty("mbeanName") String mbeanName,
                                   @JsonProperty("metricName") String metricName,
-                                  @JsonProperty("attributes") Set<String> attributes) {
+                                  @JsonProperty("attributes") Set<JmxAttributeIdentifier> attributes) {
             this.mbeanName = mbeanName;
             this.metricName = metricName;
             this.attributes = attributes;
@@ -68,7 +68,7 @@ public class JmxMetricsConfiguration {
             return metricName;
         }
 
-        public Set<String> getAttributes() {
+        public Set<JmxAttributeIdentifier> getAttributes() {
             return attributes;
         }
     }

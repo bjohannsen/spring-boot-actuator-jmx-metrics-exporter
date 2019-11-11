@@ -20,7 +20,7 @@ build:
       - build/libs/
     expire_in: 1 week
 
-test:
+unitTest:
   stage: test
   script: gradle check
   cache:

@@ -24,10 +24,15 @@ public class JmxMetricsConfigurationParsingTest {
 
         // then
         assertThat(jmxMetricsConfiguration.getPrefix(), equalTo("jmx"));
-        MBeanMetricsConfig mBeanMetricsConfig = jmxMetricsConfiguration.getMBeanConfigs().get(0);
+        MBeanMetricsConfig firstMbeanConfig = jmxMetricsConfiguration.getMBeanConfigs().get(0);
 
-        assertThat(mBeanMetricsConfig.getMbeanName(), equalTo("net.bjohannsen.spring.boot.actuator.metrics.jmxexporter:name=mBean,type=IntegrationTestConfiguration.MBeanClass"));
-        assertThat(mBeanMetricsConfig.getMetricName(), equalTo("testMetricA"));
-        assertThat(mBeanMetricsConfig.getAttributes(), containsInAnyOrder("SomeAttribute"));
+        assertThat(firstMbeanConfig.getMbeanName(), equalTo("java.lang:type=Memory"));
+        assertThat(firstMbeanConfig.getMetricName(), equalTo("memory"));
+        assertThat(firstMbeanConfig.getAttributes(), containsInAnyOrder( JmxAttributeIdentifier.of("NonHeapMemoryUsage.max"), JmxAttributeIdentifier.of("HeapMemoryUsage.max")));
+
+        MBeanMetricsConfig secondMbeanConfig = jmxMetricsConfiguration.getMBeanConfigs().get(1);
+        assertThat(secondMbeanConfig.getMbeanName(), equalTo("net.bjohannsen.spring.boot.actuator.metrics.jmxexporter:name=mBean,type=IntegrationTestConfiguration.MBeanClass"));
+        assertThat(secondMbeanConfig.getMetricName(), equalTo("testMetricA"));
+        assertThat(secondMbeanConfig.getAttributes(), containsInAnyOrder(JmxAttributeIdentifier.of("SomeAttribute")));
     }
 }

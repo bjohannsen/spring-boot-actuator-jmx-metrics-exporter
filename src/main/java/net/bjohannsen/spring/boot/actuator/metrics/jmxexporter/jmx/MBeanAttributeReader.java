@@ -1,6 +1,5 @@
 package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx;
 
-import java.util.Optional;
 import javax.management.AttributeNotFoundException;
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanException;
@@ -8,49 +7,55 @@ import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 import javax.management.ReflectionException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.JmxAttributeIdentifier;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.parser.AttributeValueParser;
 
 /**
  * Reader for JMX MBean attributes.
  */
 public class MBeanAttributeReader {
 
-    private static final Logger log = LoggerFactory.getLogger(MBeanAttributeReader.class);
-
     private final MBeanServer mBeanServer;
+    private final AttributeParserRegistry parserRegistry;
 
     /**
      * Constructor.
      *
      * @param mBeanServer mbean server.
+     * @param parserRegistry registry for {@link AttributeValueParser}s.
      */
-    public MBeanAttributeReader(MBeanServer mBeanServer) {
+    public MBeanAttributeReader(MBeanServer mBeanServer, AttributeParserRegistry parserRegistry) {
         this.mBeanServer = mBeanServer;
+        this.parserRegistry = parserRegistry;
     }
 
     /**
      * Query a MBean via given name and extract the value of a specific attribute. The value has to be an instance of
      * {@link Number}, otherwise no value will be returned.
      *
-     * @param mBeanName the name of the mbean to look for.
-     * @param attributeName attribute to fetch the value from
-     * @return the obtained attribute value or <code>Optional.empty</code> if an error occured.
+     * @param mBeanName     the name of the mbean to look for.
+     * @param attributeId attribute to fetch the value from
+     * @return the obtained attribute value or <code>Optional.empty</code> if an error occurred.
+     * @throws MBeanAttributeReadException if the attribute could not be read.
      */
-    public Optional<Double> findMBeanAttributeValue(String mBeanName, String attributeName) {
+    public double findMBeanAttributeValue(String mBeanName, JmxAttributeIdentifier attributeId) {
+        Object attributeValue = findMBeanAttribute(mBeanName, attributeId);
+        AttributeValueParser parser = parserRegistry.findParserFor(attributeValue);
+        return parser.parseNumericValue(attributeValue, attributeId);
+    }
+
+    private Object findMBeanAttribute(String mBeanName, JmxAttributeIdentifier attributeId) {
         try {
             ObjectName mBeanObjectName = ObjectName.getInstance(mBeanName);
-            Number attributeValue = (Number) mBeanServer.getAttribute(mBeanObjectName, attributeName);
-            return Optional.of(attributeValue.doubleValue());
+            return mBeanServer.getAttribute(mBeanObjectName, attributeId.getName());
         } catch (MalformedObjectNameException e) {
-            log.info("Invalid MBean name [{}].", mBeanName, e);
+            throw new MBeanAttributeReadException("Invalid MBean name [" + mBeanName + "].", e);
         } catch (InstanceNotFoundException e) {
-            log.info("No MBean found for name [{}].", mBeanName, e);
+            throw new MBeanAttributeReadException("No MBean found for name [" + mBeanName + "].", e);
         } catch (AttributeNotFoundException e) {
-            log.info("No Attribute [{}] found for MBean [{}].", attributeName, mBeanName, e);
-        }  catch (ReflectionException | MBeanException e) {
-            log.info("Error while scraping attribute [{}] of MBean [{}].", attributeName, mBeanName, e);
+            throw new MBeanAttributeReadException("No Attribute [" + attributeId +"] found for MBean [" + mBeanName + "].", e);
+        } catch (ReflectionException | MBeanException e) {
+            throw new MBeanAttributeReadException("Error while scraping attribute [" + attributeId + "] of MBean [" + mBeanName + "].", e);
         }
-        return Optional.empty();
     }
 }

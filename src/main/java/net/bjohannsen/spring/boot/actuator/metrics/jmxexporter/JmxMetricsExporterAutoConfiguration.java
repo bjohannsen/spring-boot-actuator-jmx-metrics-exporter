@@ -3,10 +3,15 @@ package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.core.instrument.MeterRegistry;
 import java.io.IOException;
+import java.util.List;
 import javax.management.MBeanServer;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.JmxMetricsConfiguration;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.JmxMetricsExportProperties;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.AttributeParserRegistry;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.parser.CompositeTypeAttributeParser;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.parser.AttributeValueParser;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.MBeanAttributeReader;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.parser.SimpleTypeAttributeParser;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.metrics.MetricFacade;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.metrics.ValueReferenceStore;
 import org.slf4j.Logger;
@@ -41,8 +46,23 @@ class JmxMetricsExporterAutoConfiguration {
     }
 
     @Bean
-    MBeanAttributeReader mBeanAttributeReader(MBeanServer mBeanServer) {
-        return new MBeanAttributeReader(mBeanServer);
+    MBeanAttributeReader mBeanAttributeReader(MBeanServer mBeanServer, AttributeParserRegistry attributeParserRegistry) {
+        return new MBeanAttributeReader(mBeanServer, attributeParserRegistry);
+    }
+
+    @Bean
+    AttributeParserRegistry attributeParserRegistry(List<AttributeValueParser> attributeParsers) {
+        return new AttributeParserRegistry(attributeParsers);
+    }
+
+    @Bean
+    CompositeTypeAttributeParser compositeTypeJmxAttributeReader() {
+        return new CompositeTypeAttributeParser();
+    }
+
+    @Bean
+    SimpleTypeAttributeParser simpleTypeJmxAttributeReader() {
+        return new SimpleTypeAttributeParser();
     }
 
     @Bean

@@ -4,9 +4,9 @@
 
 
 # spring-boot-actuator-jmx-metrics-exporter
-Glue Library to publish JMX MBean attributes as Spring Actuator metrics.
+Glue Library to publish JMX MBean attributes as Spring Actuator metrics. 
+Supports simple attribute values that can be parsed as a Number as well as composite attribute types.
 
-## How it works
 It reads configured attributes from MBeans and submits them to the Spring Boot Actuator metrics system (i.e. Micrometer).
 The JMX data is scraped in a configurable interval to avoid performance issues.
 
@@ -14,7 +14,7 @@ The JMX data is scraped in a configurable interval to avoid performance issues.
 
 Add dependency:
 ```
-runtime 'net.bjohannsen:spring-boot-actuator-jmx-metrics-exporter:1.0.0-RELEASE")
+runtime 'net.bjohannsen:spring-boot-actuator-jmx-metrics-exporter:1.1.0-RELEASE")
 ```
 
 Requirements:
@@ -22,11 +22,11 @@ Requirements:
 - Micrometer (Spring Boot2 Actuator or Spring Boot 1.5 with [Micrometer Legacy adapter](https://micrometer.io/docs/ref/spring/1.5))
 - Jmx should be enabled in spring config ((spring.jmx.enabled=true). It is disabled by default since Spring Boot 2.2)
 
-### Configuration
+## Configuration
 
-Configuration properties are located under 'jmx-metrics-export'.
+Configuration property prefix is 'jmx-metrics-export'.
 
-#### Global configuration
+### Properties
 
 | Key              | Default                             | Description                                             |
 |------------------|-------------------------------------|---------------------------------------------------------|
@@ -34,7 +34,7 @@ Configuration properties are located under 'jmx-metrics-export'.
 | scrape-interval  | 10000                               | Interval to scrape data from MBeans in milliseconds     |
 | config-file      | classpath:jmx-metrics-exporter.json | Resource link to mbean config json file (see below)     |
 
-#### jmx-metrics-exporter.json
+### jmx-metrics-exporter.json
 
 ```
 {
@@ -50,6 +50,23 @@ Configuration properties are located under 'jmx-metrics-export'.
 ```
 
 The example will expose metrics 'jmx.myMetric.SomeAttribute' and 'jmx.myMetric.AnotherAttribute'.
+
+#### Composite types
+
+To export composite type members, simply config the attribute as 'attributeName.memberKey' format. Example:
+```
+...
+  "mbeans": [
+    {
+      "mbeanName": "java.lang:type=Memory",
+      "metricName": "memory",
+      "attributes": ["HeapMemoryUsage.max"]
+    }
+  ]
+...
+```
+
+### Examples
 
 Example configurations for application.yml and config files can be found in the [application-test.yml](https://github.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/blob/master/src/test/resources/application-test.yml) 
 and [mbean-metrics-config.json](https://github.com/bjohannsen/spring-boot-actuator-jmx-metrics-exporter/blob/master/src/test/resources/mbean-metrics-config.json).

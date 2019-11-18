@@ -1,5 +1,6 @@
 package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config;
 
+import java.util.Set;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -26,10 +27,16 @@ public class JmxMetricsExportProperties {
     private long scrapeInterval = 10_000;
 
     /**
-     * Path to json config file containing {@link JmxMetricsConfiguration}.
-     * Could be a reference to a file from the classpath (classpath:file.json), file system (file://file.json) or an URL.
+     * Prefix for exposed metrics.
      */
-    private String configFile = "classpath:mbean-metrics-config.json";
+    private String prefix = "jmx";
+
+    /**
+     * List of paths to json config file containing {@link JmxMetricsConfiguration}.
+     * Could be a references to files from the classpath (classpath:file.json), file system (file://file.json) or URLs.
+     * If multiple configs are used, they are merged.
+     */
+    private Set<String> configFiles = Set.of("classpath:mbean-metrics-config.json");
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
@@ -39,11 +46,19 @@ public class JmxMetricsExportProperties {
         this.scrapeInterval = scrapeInterval;
     }
 
-    public String getConfigFile() {
-        return configFile;
+    public String getPrefix() {
+        return prefix;
     }
 
-    public void setConfigFile(String configFile) {
-        this.configFile = configFile;
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public Set<String> getConfigFilePaths() {
+        return configFiles;
+    }
+
+    public void setConfigFiles(Set<String> configFiles) {
+        this.configFiles = configFiles;
     }
 }

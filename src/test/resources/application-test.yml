@@ -4,5 +4,6 @@ spring:
 
 jmx-metrics-export:
   enabled: true
+  prefix: jmx
   scrape-interval: 1000
-  config-file: classpath:mbean-metrics-config.json
+  config-files: classpath:mbean-metrics-config.json, classpath:composite-metrics-config.json

@@ -12,19 +12,11 @@ import java.util.Set;
  */
 public class JmxMetricsConfiguration {
 
-    private final String prefix;
     private final List<MBeanMetricsConfig> mbeans;
 
     @JsonCreator
-    public JmxMetricsConfiguration(
-            @JsonProperty(value = "prefix", defaultValue = "jmx") String prefix,
-            @JsonProperty("mbeans") List<MBeanMetricsConfig> mbeans) {
-        this.prefix = prefix;
+    public JmxMetricsConfiguration(@JsonProperty("mbeans") List<MBeanMetricsConfig> mbeans) {
         this.mbeans = mbeans;
-    }
-
-    public String getPrefix() {
-        return prefix;
     }
 
     public List<MBeanMetricsConfig> getMBeanConfigs() {

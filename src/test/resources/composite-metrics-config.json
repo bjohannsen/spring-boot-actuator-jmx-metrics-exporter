@@ -1,0 +1,9 @@
+{
+  "mbeans": [
+    {
+      "mbeanName": "java.lang:type=Memory",
+      "metricName": "memory",
+      "attributes": ["HeapMemoryUsage.max", "NonHeapMemoryUsage.max"]
+    }
+  ]
+}

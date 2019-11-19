@@ -23,16 +23,24 @@ public class JmxMetricsConfigurationParsingTest {
         JmxMetricsConfiguration jmxMetricsConfiguration = objectMapper.readValue(resourceAsStream, JmxMetricsConfiguration.class);
 
         // then
-        assertThat(jmxMetricsConfiguration.getPrefix(), equalTo("jmx"));
-        MBeanMetricsConfig firstMbeanConfig = jmxMetricsConfiguration.getMBeanConfigs().get(0);
-
-        assertThat(firstMbeanConfig.getMbeanName(), equalTo("java.lang:type=Memory"));
-        assertThat(firstMbeanConfig.getMetricName(), equalTo("memory"));
-        assertThat(firstMbeanConfig.getAttributes(), containsInAnyOrder( JmxAttributeIdentifier.of("NonHeapMemoryUsage.max"), JmxAttributeIdentifier.of("HeapMemoryUsage.max")));
-
-        MBeanMetricsConfig secondMbeanConfig = jmxMetricsConfiguration.getMBeanConfigs().get(1);
+        MBeanMetricsConfig secondMbeanConfig = jmxMetricsConfiguration.getMBeanConfigs().get(0);
         assertThat(secondMbeanConfig.getMbeanName(), equalTo("net.bjohannsen.spring.boot.actuator.metrics.jmxexporter:name=mBean,type=IntegrationTestConfiguration.MBeanClass"));
         assertThat(secondMbeanConfig.getMetricName(), equalTo("testMetricA"));
         assertThat(secondMbeanConfig.getAttributes(), containsInAnyOrder(JmxAttributeIdentifier.of("SomeAttribute")));
     }
+
+    @Test
+    public void thatConfigParsingWorksForCompositeTypes() throws IOException {
+        // given
+        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("composite-metrics-config.json");
+
+        // when
+        JmxMetricsConfiguration jmxMetricsConfiguration = objectMapper.readValue(resourceAsStream, JmxMetricsConfiguration.class);
+
+        // then
+        MBeanMetricsConfig firstMbeanConfig = jmxMetricsConfiguration.getMBeanConfigs().get(0);
+        assertThat(firstMbeanConfig.getMbeanName(), equalTo("java.lang:type=Memory"));
+        assertThat(firstMbeanConfig.getMetricName(), equalTo("memory"));
+        assertThat(firstMbeanConfig.getAttributes(), containsInAnyOrder( JmxAttributeIdentifier.of("NonHeapMemoryUsage.max"), JmxAttributeIdentifier.of("HeapMemoryUsage.max")));
+   }
 }

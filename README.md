@@ -14,7 +14,7 @@ The JMX data is scraped in a configurable interval to avoid performance issues.
 
 Add dependency:
 ```
-runtime 'net.bjohannsen:spring-boot-actuator-jmx-metrics-exporter:1.1.1-RELEASE")
+runtime 'net.bjohannsen:spring-boot-actuator-jmx-metrics-exporter:2.0.0-SNAPSHOT")
 ```
 
 Requirements:
@@ -30,9 +30,10 @@ Configuration property prefix is 'jmx-metrics-export'.
 
 | Key              | Default                             | Description                                             |
 |------------------|-------------------------------------|---------------------------------------------------------|
-| enabled          | false                               | Enable metrics                                          | 
+| enabled          | false                               | Enable metrics                                          |
+| prefix           | jmx                                 | Prefix for exposed metrics                              |
 | scrape-interval  | 10000                               | Interval to scrape data from MBeans in milliseconds     |
-| config-file      | classpath:jmx-metrics-exporter.json | Resource link to mbean config json file (see below)     |
+| config-files     | classpath:jmx-metrics-exporter.json | List of resource links to mbean config json files (see below) |
 
 ### jmx-metrics-exporter.json
 
@@ -49,7 +50,8 @@ Configuration property prefix is 'jmx-metrics-export'.
 }
 ```
 
-The example will expose metrics 'jmx.myMetric.SomeAttribute' and 'jmx.myMetric.AnotherAttribute'.
+The example will expose metrics 'jmx.myMetric.SomeAttribute' and 'jmx.myMetric.AnotherAttribute'. 
+Multiple config files can be specified and will be used in an additive manner.
 
 #### Composite types
 

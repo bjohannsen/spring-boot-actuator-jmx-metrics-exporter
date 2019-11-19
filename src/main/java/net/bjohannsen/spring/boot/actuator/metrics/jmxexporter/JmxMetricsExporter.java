@@ -2,6 +2,7 @@ package net.bjohannsen.spring.boot.actuator.metrics.jmxexporter;
 
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.JmxMetricsConfiguration;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.JmxAttributeIdentifier;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.JmxMetricsExportProperties;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.MBeanAttributeReader;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.MBeanAttributeReadException;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.metrics.MetricFacade;
@@ -25,12 +26,14 @@ public class JmxMetricsExporter {
     private final MBeanAttributeReader mBeanAttributeReader;
     private final MetricFacade metricFacade;
     private final JmxMetricsConfiguration config;
+    private final JmxMetricsExportProperties properties;
 
     JmxMetricsExporter(MBeanAttributeReader mBeanAttributeReader, MetricFacade metricFacade,
-                       JmxMetricsConfiguration config) {
+                       JmxMetricsConfiguration config, JmxMetricsExportProperties properties) {
         this.mBeanAttributeReader = mBeanAttributeReader;
         this.metricFacade = metricFacade;
         this.config = config;
+        this.properties = properties;
     }
 
     /**
@@ -61,6 +64,6 @@ public class JmxMetricsExporter {
     }
 
     private String buildMetricName(String mBeanName, JmxAttributeIdentifier attributeId) {
-        return config.getPrefix() + DELIMITER + mBeanName + DELIMITER + attributeId;
+        return properties.getPrefix() + DELIMITER + mBeanName + DELIMITER + attributeId;
     }
 }

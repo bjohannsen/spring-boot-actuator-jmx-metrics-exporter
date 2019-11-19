@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.JmxMetricsConfiguration;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.JmxAttributeIdentifier;
+import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.JmxMetricsExportProperties;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.MBeanAttributeReader;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.MBeanAttributeReadException;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.metrics.MetricFacade;
@@ -37,6 +38,9 @@ public class JmxMetricsExporterTest {
     private JmxMetricsConfiguration configurationMock;
 
     @Mock
+    private JmxMetricsExportProperties propertiesMock;
+
+    @Mock
     private MetricFacade metricFacadeMock;
 
     @InjectMocks
@@ -47,7 +51,7 @@ public class JmxMetricsExporterTest {
         // given
 
         JmxMetricsConfiguration.MBeanMetricsConfig mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A);
-        when(configurationMock.getPrefix()).thenReturn("jmx");
+        when(propertiesMock.getPrefix()).thenReturn("jmx");
         when(configurationMock.getMBeanConfigs()).thenReturn(List.of(mbeanConfig));
 
         when(mBeanAttributeReaderMock.findMBeanAttributeValue(M_BEAN_NAME, ATTRIBUTE_A)).thenReturn(ATTRIBUTE_VALUE);
@@ -81,7 +85,7 @@ public class JmxMetricsExporterTest {
         double valueB = 2011;
         JmxMetricsConfiguration.MBeanMetricsConfig mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A, attributeB);
         when(configurationMock.getMBeanConfigs()).thenReturn(List.of(mbeanConfig));
-        when(configurationMock.getPrefix()).thenReturn("jmx");
+        when(propertiesMock.getPrefix()).thenReturn("jmx");
 
         doReturn(ATTRIBUTE_VALUE).when(mBeanAttributeReaderMock).findMBeanAttributeValue(M_BEAN_NAME, ATTRIBUTE_A);
         doReturn(valueB).when(mBeanAttributeReaderMock).findMBeanAttributeValue(M_BEAN_NAME, attributeB);
@@ -103,7 +107,7 @@ public class JmxMetricsExporterTest {
         JmxMetricsConfiguration.MBeanMetricsConfig mbeanConfig = buildMBeanConfig(M_BEAN_NAME, METRIC_NAME, ATTRIBUTE_A);
         JmxMetricsConfiguration.MBeanMetricsConfig mbeanConfigB = buildMBeanConfig(beanNameB, metricNameB, ATTRIBUTE_A);
         when(configurationMock.getMBeanConfigs()).thenReturn(List.of(mbeanConfig, mbeanConfigB));
-        when(configurationMock.getPrefix()).thenReturn("jmx");
+        when(propertiesMock.getPrefix()).thenReturn("jmx");
 
         doReturn(ATTRIBUTE_VALUE).when(mBeanAttributeReaderMock).findMBeanAttributeValue(M_BEAN_NAME, ATTRIBUTE_A);
         doReturn(valueB).when(mBeanAttributeReaderMock).findMBeanAttributeValue(beanNameB, ATTRIBUTE_A);

@@ -38,8 +38,16 @@ public class JmxMetricsExportProperties {
      */
     private Set<String> configFiles = Set.of("classpath:mbean-metrics-config.json");
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public long getScrapeInterval() {
+        return scrapeInterval;
     }
 
     public void setScrapeInterval(long scrapeInterval) {

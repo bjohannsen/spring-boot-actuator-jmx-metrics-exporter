@@ -28,6 +28,12 @@ public class ConfigFileLoader {
         this.applicationContext = applicationContext;
     }
 
+    /**
+     * Parses and merges the given config files.
+     *
+     * @param configFilePaths given config file paths
+     * @return the merged config file
+     */
     public JmxMetricsConfiguration loadConfigFile(String ... configFilePaths) {
         List<JmxMetricsConfiguration.MBeanMetricsConfig> mbeanConfigs = Arrays.stream(configFilePaths)
                 .map(this::loadConfigFile)
@@ -36,7 +42,6 @@ public class ConfigFileLoader {
                 .collect(Collectors.toList());
 
         return new JmxMetricsConfiguration(mbeanConfigs);
-
     }
 
     private JmxMetricsConfiguration loadConfigFile(String configFilePath) {

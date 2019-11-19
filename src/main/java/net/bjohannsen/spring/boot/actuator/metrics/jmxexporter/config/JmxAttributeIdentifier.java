@@ -13,7 +13,7 @@ public class JmxAttributeIdentifier {
     private static final String REGEX_DELIMITER = "\\"+DELIMITER;
 
     /**
-     * Unique name of the attribute
+     * Unique name of the attribute.
      */
     private final String name;
 

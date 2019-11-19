@@ -21,8 +21,8 @@ public class MBeanAttributeReader {
     /**
      * Constructor.
      *
-     * @param mBeanServer mbean server.
-     * @param parserRegistry registry for {@link AttributeValueParser}s.
+     * @param mBeanServer mbean server
+     * @param parserRegistry registry for {@link AttributeValueParser AttributeValueParsers}
      */
     public MBeanAttributeReader(MBeanServer mBeanServer, AttributeParserRegistry parserRegistry) {
         this.mBeanServer = mBeanServer;
@@ -33,10 +33,10 @@ public class MBeanAttributeReader {
      * Query a MBean via given name and extract the value of a specific attribute. The value has to be an instance of
      * {@link Number}, otherwise no value will be returned.
      *
-     * @param mBeanName     the name of the mbean to look for.
+     * @param mBeanName the name of the mbean to look for
      * @param attributeId attribute to fetch the value from
-     * @return the obtained attribute value or <code>Optional.empty</code> if an error occurred.
-     * @throws MBeanAttributeReadException if the attribute could not be read.
+     * @return the obtained attribute value or <code>Optional.empty</code> if an error occurred
+     * @throws MBeanAttributeReadException if the attribute could not be read
      */
     public double findMBeanAttributeValue(String mBeanName, JmxAttributeIdentifier attributeId) {
         Object attributeValue = findMBeanAttribute(mBeanName, attributeId);

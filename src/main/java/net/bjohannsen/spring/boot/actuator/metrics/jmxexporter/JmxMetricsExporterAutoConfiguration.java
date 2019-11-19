@@ -30,7 +30,7 @@ import static net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.config.Jmx
 @ConditionalOnProperty(value = CONFIG_BASE_NAME + ".enabled", havingValue = "true")
 @AutoConfigureAfter(JmxMetricsExportProperties.class)
 @Configuration
-class JmxMetricsExporterAutoConfiguration {
+public class JmxMetricsExporterAutoConfiguration {
 
     @Bean
     JmxMetricsExporter jmxBeanMetricsExporter(MBeanAttributeReader mBeanAttributeReader,

@@ -14,7 +14,7 @@ The JMX data is scraped in a configurable interval to avoid performance issues.
 
 Add dependency:
 ```
-runtime 'net.bjohannsen:spring-boot-actuator-jmx-metrics-exporter:2.0.0-RELEASE")
+runtime 'net.bjohannsen:spring-boot-actuator-jmx-metrics-exporter:2.0.1-RELEASE")
 ```
 
 Requirements:

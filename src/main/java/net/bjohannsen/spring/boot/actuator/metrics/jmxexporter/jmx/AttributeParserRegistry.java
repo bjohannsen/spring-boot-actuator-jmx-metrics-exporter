@@ -4,7 +4,7 @@ import java.util.List;
 import net.bjohannsen.spring.boot.actuator.metrics.jmxexporter.jmx.parser.AttributeValueParser;
 
 /**
- * Registry for {@link AttributeValueParser}s.
+ * Registry for {@link AttributeValueParser AttributeValueParsers}.
  */
 public class AttributeParserRegistry {
 
@@ -13,7 +13,7 @@ public class AttributeParserRegistry {
     /**
      * Constructor.
      *
-     * @param parsers given attribute parsers.
+     * @param parsers given attribute parsers
      */
     public AttributeParserRegistry(List<AttributeValueParser> parsers) {
         this.parsers = parsers;
